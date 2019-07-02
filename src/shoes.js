@@ -5,15 +5,14 @@ function printError(error) {
     console.error(error.message);
 }
 
-function printMessage(username, badgeCount, point){
-    const message = `${username} has ${badgeCount} total badge(s) and ${point}
- points in JavaScript`;
+function printMessage(shoe, data, calculation){
+    const message = `${shoe} has ${data} its true to size is ${calculation}`;
     console.log(message); 
 }
 
-function get(username){
+function get(shoe){
     try{
-        const request = https.get(`https://teamtreehouse.com/${username}.json`,
+        const request = https.get(`https://stockx.com/${shoe}.json`, // Api Location
     response => {
         if(response.statusCode === 200)
         {
@@ -27,7 +26,7 @@ function get(username){
                     //parse the data 
                     const profile = JSON.parse(body); 
                     //print the data
-                    printMessage(username, profile.badges.length, profile.points.JavaScript);
+                    printMessage(shoe, data.length, profile.calculation);
                     } catch (error) {
                         printError(error);
                     }
