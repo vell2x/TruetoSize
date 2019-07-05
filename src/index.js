@@ -1,14 +1,27 @@
-const shoe = require('./shoes');
-const conn = require('./conn');
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
+const db = require('./conn')
+const port = 3000
 
-conn.client;
-const users = process.argv.slice(2);
-var trueToSizeCalculation = 0;
-var updatedInfo;
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
 
-function cacl(users) {
-	trueToSizeCalculation += users.forEach(shoe.get);
-	updatedInfo = trueToSizeCalculation / users.length;
-}
+app.get('/', (request, response) => {
+  response.json({ info: 'Node.js, Express, and Postgres API' })
+})
 
-module.exports.calc = updateData;
+app.get('/shoe', db.getShoe)
+app.post('/shoe', db.createShoe)
+app.put('/shoe/:id', db.updateShoe)
+app.delete('/shoe/:id', db.deleteShoe)
+
+app.listen(port, () => {
+  console.log(`App running on port ${port}.`)
+})
+
+module.exports.app = app;
