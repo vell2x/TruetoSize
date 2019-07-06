@@ -20,7 +20,7 @@ const getShoe = (request, response) => {
 const createShoe = (request, response) => {
   const { shoe, data, calculation } = request.body
 
-  pool.query('INSERT INTO truetosize (shoe, data, calculation) VALUES ($1, $2, $3)', [shoe, data, calculation], (error, results) => {
+  pool.query('INSERT INTO shoes_truetosize (shoe_name, truesize_data, truesize_calculation) VALUES ($1, $2, $3)', [shoe, data, calculation], (error, results) => {
     if (error) {
       throw error
     }
@@ -30,11 +30,11 @@ const createShoe = (request, response) => {
 
 const updateShoe = (request, response) => {
   const id = parseInt(request.params.id)
-  const { shoe, data, calculation } = request.body
+  const { data, calculation } = request.body
 
   pool.query(
-    'UPDATE truetosize SET shoe = $1, data = $2, calculation = $3 WHERE id = $4',
-    [shoe, data, calculation, id],
+    'UPDATE truetosize SET data = $1, calculation = $2 WHERE id = $3',
+    [data, calculation, id],
     (error, results) => {
       if (error) {
         throw error

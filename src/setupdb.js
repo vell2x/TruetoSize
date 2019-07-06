@@ -1,11 +1,19 @@
-const { Pool } = require('pg');
+const { Pool, Client } = require('pg');
 const dotenv = require('dotenv');
+var pgtools = require('pgtools');
 
 dotenv.config();
 
+
 const pool = new Pool({
+  user: process.env.POSTGRESUSER,
+  host: process.env.POSTGRESHOST,
+  database: process.env.POSTGRESDB,
+  password: process.env.POSTGRESPASS,
+  port: 5432,
   connectionString: process.env.DATABASE_URL
 });
+
 
 pool.on('connect', () => {
   console.log('connected to the db');
@@ -17,11 +25,11 @@ pool.on('connect', () => {
 const createTables = () => {
   const queryText =
     `CREATE TABLE IF NOT EXISTS
-    truetosize(
+    shoes_truetosize(
         id ID PRIMARY KEY,
-        shoe VARCHAR(128) NOT NULL,
-        data INTEGER[] NOT NULL,
-        calculation FLOAT NOT NULL,
+        shoe_name VARCHAR(30) NOT NULL,
+        truesize_data INTEGER[] NOT NULL,
+        truesize_calculation FLOAT NOT NULL,
         created_date TIMESTAMP,
         modified_date TIMESTAMP
       )`;
@@ -41,7 +49,7 @@ const createTables = () => {
  * Drop Tables
  */
 const dropTables = () => {
-  const queryText = 'DROP TABLE IF EXISTS reflections';
+  const queryText = 'DROP TABLE IF EXISTS shoes_truetosize';
   pool.query(queryText)
     .then((res) => {
       console.log(res);
