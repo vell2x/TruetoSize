@@ -1,4 +1,6 @@
 const Pool = require('pg').Pool
+const util = require('./shoes')
+const bodyParser = require('body-parser')
 
 const pool = new Pool({
   user: process.env.POSTGRESUSER,
@@ -8,8 +10,17 @@ const pool = new Pool({
   port: 5432,
 })
 
-const getShoe = (request, response) => {
+const getShoes = (request, response) => {
   pool.query('SELECT * FROM shoes_truetosize ORDER BY shoe_name ASC', (error, results) => {
+    if (error) {
+      throw error.message;
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getShoe = (request, response) => {
+  pool.query('SELECT truesize_data FROM shoes_truetosize', (error, results) => {
     if (error) {
       throw error.message;
     }
@@ -30,11 +41,13 @@ const createShoe = (request, response) => {
 
 const updateShoe = (request, response) => {
   const id = parseInt(request.params.id)
-  const { data, calculation } = request.body
+  const { shoe_name, truesize_data, truesize_calculation } = request.body
+
+  var updatedCalc = util.trueToSizeCalculation(shoe_name, truesize_data)
 
   pool.query(
-    'UPDATE truetosize SET data = $1, calculation = $2 WHERE id = $3',
-    [data, calculation, id],
+    'UPDATE shoes_truetosize SET truesize_data = $1, truesize_calculation = $2 WHERE shoe_name = $3',
+    [truesize_data, updatedCalc, shoe_name],
     (error, results) => {
       if (error) {
         throw error
@@ -56,7 +69,7 @@ const deleteShoe = (request, response) => {
 }
 
 module.exports = {
-  getShoe,
+  getShoes,
   createShoe,
   updateShoe,
   deleteShoe,

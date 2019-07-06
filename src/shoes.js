@@ -10,37 +10,18 @@ function printMessage(shoe, data, calculation){
     console.log(message); 
 }
 
-function get(shoe){
-    try{
-        const request = https.get(`https://stockx.com/${shoe}.json`, // Api Location
-    response => {
-        if(response.statusCode === 200)
+function trueToSizeCalculation(shoeName, data) {
+    calc = 0;
+    size = 0;
+
+    for(let d of data) {
+        if(d.match(/^[0-9]+$/) != null)
         {
-            let body = "";
-            response.on("data", data => {
-                body += data.toString();
-                });
+            calc += parseInt(d);
+            size++;
+        }
+    };
+    return calc / size; 
+} //average of the true to size entries for a given shoe
 
-            response.on('end', () => { 
-                try{
-                    //parse the data 
-                    const profile = JSON.parse(body); 
-                    //print the data
-                    printMessage(shoe, data.length, profile.calculation);
-                    } catch (error) {
-                        printError(error);
-                    }
-                    });
-                }
-                else {
-                    const message = 'There was a error getting the profile for ${username} (${response.statusCode})';
-                    const statusCodeError = new Error(message);
-                    printError(statusCodeError);
-                }
-        });
-    } catch (error) {
-
-    }
-}
-
-module.exports.get = get;
+module.exports.trueToSizeCalculation = trueToSizeCalculation;

@@ -15,7 +15,7 @@ app.get('/', (request, response) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-app.get('/shoe', db.getShoe)
+app.get('/shoe', db.getShoes)
 app.post('/shoe', db.createShoe)
 app.put('/shoe/:id', db.updateShoe)
 app.delete('/shoe/:id', db.deleteShoe)
