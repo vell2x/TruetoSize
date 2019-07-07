@@ -29,30 +29,30 @@ const getShoe = (request, response) => {
 }
 
 const createShoe = (request, response) => {
-  const { shoe, data, calculation } = request.body
+  const { shoe_name, truesize_data, truesize_calculation } = request.body
 
-  pool.query('INSERT INTO shoes_truetosize (shoe_name, truesize_data, truesize_calculation) VALUES ($1, $2, $3)', [shoe, data, calculation], (error, results) => {
+  pool.query('INSERT INTO shoes_truetosize (shoe_name, truesize_data, truesize_calculation) VALUES ($1, $2, $3)', [shoe_name, truesize_data, truesize_calculation], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`User added with ID: ${result.insertId}`)
+    response.status(201).send(`User added!`)
   })
 }
 
 const updateShoe = (request, response) => {
   const id = parseInt(request.params.id)
-  const { shoe_name, truesize_data, truesize_calculation } = request.body
+  const { shoe_name, truesize_data } = request.body
 
-  var updatedCalc = util.trueToSizeCalculation(shoe_name, truesize_data)
-
+  var truesize_calculation = util.trueToSizeCalculation(shoe_name, truesize_data)
+  console.log(shoe_name);
+  console.log(truesize_data);
+  console.log(truesize_calculation);
   pool.query(
-    'UPDATE shoes_truetosize SET truesize_data = $1, truesize_calculation = $2 WHERE shoe_name = $3',
-    [truesize_data, updatedCalc, shoe_name],
-    (error, results) => {
+    'UPDATE shoes_truetosize SET truesize_data = $2, truesize_calculation = $3 WHERE shoe_name = $4', [truesize_data, truesize_calculation, shoe_name], (error, results) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`User modified with ID: ${id}`)
+      response.status(200).send(`User modified with Name: ${shoe_name}`)
     }
   )
 }

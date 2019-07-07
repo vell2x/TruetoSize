@@ -22,6 +22,6 @@ function trueToSizeCalculation(shoeName, data) {
         }
     };
     return calc / size; 
-} //average of the true to size entries for a given shoe
+}
 
 module.exports.trueToSizeCalculation = trueToSizeCalculation;
